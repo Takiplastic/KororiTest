@@ -7,6 +7,8 @@ public class buttonevent : MonoBehaviour
     private Sprite normalSprite = null;
     [SerializeField]
     private Sprite pushedSprite = null;
+    [SerializeField]
+    private Sprite disabledSprite = null;
     private Image image = null;
     private void Start()
     {
@@ -22,5 +24,11 @@ public class buttonevent : MonoBehaviour
     {
         Debug.Log("Called: ToNormalSprite");
         image.sprite = normalSprite;
+    }
+
+    public void ToDisabledSprite()
+    {
+        Debug.Log("Called: ToDisabledSprite");
+        image.sprite = disabledSprite;
     }
 }

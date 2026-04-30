@@ -28,7 +28,11 @@ public class SceneLoader : MonoBehaviour
     public void LoadScene(string sceneName)
     {
         if (SceneExists(sceneName))
+        {
+            gametime.instance.Initialize();
             SceneManager.LoadScene(sceneName);
+        }
+            
         else
             Debug.LogError(sceneName + "：該当のシーンが存在しません。");
 
@@ -45,6 +49,7 @@ public class SceneLoader : MonoBehaviour
     private IEnumerator DelayLoad(string sceneName)
     {
         yield return new WaitForSeconds(WAIT_TIME);
+        gametime.instance.Initialize();
         SceneManager.LoadScene(sceneName);
     }
 

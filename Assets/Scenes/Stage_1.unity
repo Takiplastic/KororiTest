@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 56679140}
   - component: {fileID: 56679139}
   m_Layer: 5
-  m_Name: Close (2)
+  m_Name: TItle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4097,7 +4097,7 @@ GameObject:
   - component: {fileID: 1762044721}
   - component: {fileID: 1762044720}
   m_Layer: 5
-  m_Name: Close (1)
+  m_Name: StageSelect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

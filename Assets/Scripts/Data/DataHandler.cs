@@ -110,7 +110,7 @@ public class DataHandler : MonoBehaviour
         stageDatas_.stageDataList = new StageData[NUM_STAGE];
         for (int i = 0; i < NUM_STAGE; i++)
         {
-            stageDatas_.stageDataList[i] = new StageData(i + 1, true, Mathf.Min(i, 3));
+            stageDatas_.stageDataList[i] = new StageData(i + 1, false, 0);
         }
         stageDatas_.stageDataList[0].hasUnLocked_ = true;
     }
