@@ -18,7 +18,7 @@ public class StageData
 {
     public int stageId_ = -1;
     public bool hasUnLocked_ = false;
-    public int score_ = -1;
+    public int score_ = 0;
 
     public StageData(int id, bool hasUnLocked, int score)
     {

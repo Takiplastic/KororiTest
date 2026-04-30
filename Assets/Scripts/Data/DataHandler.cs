@@ -6,8 +6,11 @@ using UnityEngine;
 
 public class DataHandler : MonoBehaviour
 {
-    private static DataHandler instance_ = null;
+    public static DataHandler instance_ = null;
     private bool hasInitLoaded = false;
+
+    public OptionData optionData_ = null;
+    public StageDatas stageDatas_ = null;
 
     private void Awake()
     {
@@ -24,60 +27,68 @@ public class DataHandler : MonoBehaviour
 
     public void Start()
     {
-        OptionData optionData = new OptionData();
-        optionData.ActivateBGM = false;
-        SaveOptionData(optionData);
+        DeleteAllData();
+        if (hasInitLoaded) return;
 
-        OptionData loadedOptionData = LoadOptioinData();
-
-        Debug.Log(loadedOptionData.ActivateBGM);
-
-        StageDatas stageDatas = new StageDatas();
-        stageDatas.stageDataList = new StageData[3];
-        stageDatas.stageDataList[0] = new StageData(1, true, 0);
-        stageDatas.stageDataList[1] = new StageData(2, true, 0);
-        stageDatas.stageDataList[2] = new StageData(3, true, 0);
-        SaveStageDatas(stageDatas);
-
-        StageDatas loadedStageDatas = LoadStageDatas();
-        loadedStageDatas.ShowParams();
-
+        if (!LoadOptioinData())
+            CreateInitOptionData();
+        if (!LoadStageDatas())
+            CreateInitStageDatas();
     }
 
     //オプションデータにはBGMを有効にするかどうかのみ保存
-    public OptionData LoadOptioinData()
+    public bool LoadOptioinData()
     {
         string datastr = string.Empty; ;
-        StreamReader reader;
-        reader = new StreamReader(Application.dataPath + "/optionData.json");
+        string pathstr = Application.persistentDataPath + "/optionData.json";
+        if (!File.Exists(pathstr))
+            return false;
+
+        StreamReader reader = null; 
+        reader = new StreamReader(pathstr);
         datastr = reader.ReadToEnd();
         reader.Close();
+        optionData_ = JsonUtility.FromJson<OptionData>(datastr);
 
-        return JsonUtility.FromJson<OptionData>(datastr);
+        return true;
     }
 
     //オプションデータを保存
-    public void SaveOptionData(OptionData opitonData)
+    public void SaveOptionData()
     {
         StreamWriter writer;
 
-        string jsonstr = JsonUtility.ToJson(opitonData);
+        string jsonstr = JsonUtility.ToJson(optionData_);
 
-        writer = new StreamWriter(Application.dataPath + "/optionData.json", false);
+        writer = new StreamWriter(Application.persistentDataPath + "/optionData.json", false);
         writer.Write(jsonstr);
         writer.Flush();
         writer.Close();
     }
 
-    public StageDatas LoadStageDatas()
+    public void CreateInitOptionData()
     {
-        string datastr = string.Empty; ;
+        optionData_ = new OptionData();
+        SaveOptionData();
+    }
+
+    public bool LoadStageDatas()
+    {
+        string datastr = string.Empty;
+        string pathstr = Application.persistentDataPath + "/stageDatas.json";
+        if (!File.Exists(pathstr))
+            return false;
+
         StreamReader reader;
-        reader = new StreamReader(Application.dataPath + "/stageDatas.json");
+        reader = new StreamReader(pathstr);
+        if (reader == null)
+            return false;
+
         datastr = reader.ReadToEnd();
         reader.Close();
+        stageDatas_ = JsonUtility.FromJson<StageDatas>(datastr);
 
-        return JsonUtility.FromJson<StageDatas>(datastr);
+        return true;
     }
 
     public void SaveStageDatas(StageDatas stageDatas)
@@ -86,9 +97,35 @@ public class DataHandler : MonoBehaviour
 
         string jsonstr = JsonUtility.ToJson(stageDatas);
 
-        writer = new StreamWriter(Application.dataPath + "/stageDatas.json", false);
+        writer = new StreamWriter(Application.persistentDataPath + "/stageDatas.json", false);
         writer.Write(jsonstr);
         writer.Flush();
         writer.Close();
+    }
+
+    public void CreateInitStageDatas()
+    {
+        int NUM_STAGE = 20;
+        stageDatas_ = new StageDatas();
+        stageDatas_.stageDataList = new StageData[NUM_STAGE];
+        for (int i = 0; i < NUM_STAGE; i++)
+        {
+            stageDatas_.stageDataList[i] = new StageData(i + 1, true, Mathf.Min(i, 3));
+        }
+        stageDatas_.stageDataList[0].hasUnLocked_ = true;
+    }
+
+    public void DeleteAllData()
+    {
+        string optionpath = Application.persistentDataPath + "optionData.json";
+        if (File.Exists(optionpath))
+        {
+            File.Delete(optionpath);
+        }
+        string stagedataspath = Application.persistentDataPath + "stageDatas.json";
+        if (File.Exists(stagedataspath))
+        {
+            File.Delete(stagedataspath);
+        }
     }
 }

@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 public class SceneLoader : MonoBehaviour
 {
 
-    private const float WAIT_TIME = 1.0f;
+    private const float WAIT_TIME = 0.2f;
 
     private static SceneLoader instance_ = null;
 
@@ -18,7 +18,6 @@ public class SceneLoader : MonoBehaviour
         if (!instance_)
         {
             instance_ = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -57,5 +56,10 @@ public class SceneLoader : MonoBehaviour
             return false;
         else
             return true;
+    }
+
+    public void Reload()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
