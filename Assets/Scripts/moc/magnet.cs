@@ -7,6 +7,8 @@ public class magnet : MonoBehaviour
     private GameObject tutorialPanel;
     [SerializeField]
     private bool needTutorial = true;
+    [SerializeField]
+    private Transform center = null;
 
     private Transform magnetarea = null;
     private static bool hastutorialed = false;
@@ -81,9 +83,13 @@ public class magnet : MonoBehaviour
     private void Push()
     {
         Debug.Log("Called:Push");
+        //centerˆÚ“®
+        float y = (float)(center.position.y + 0.01 * Mathf.Sin(Time.deltaTime));
+        center.position = new Vector2(center.position.x, y);
+        //player‚Ð‚«‚Â‚¯
         player player = FindFirstObjectByType<player>();
         Rigidbody2D rigid_player = player.GetComponent<Rigidbody2D>();
-        Vector2 add_vector = (transform.position - player.transform.position).normalized;
+        Vector2 add_vector = (center.position - player.transform.position).normalized;
         rigid_player.AddForce(add_vector * 10f);
     }
 }

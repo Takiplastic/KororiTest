@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering.Universal;
 
 public class bane : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class bane : MonoBehaviour
         if (tutorialPanel)
             tutorialPanel.SetActive(false);
 
+        Light2D light = GetComponentInChildren<Light2D>();
+        light.enabled = false;
         bane.hastutorialed = false;
         eventTrigger = GetComponent<EventTrigger>();
 
@@ -42,6 +45,8 @@ public class bane : MonoBehaviour
         {
             tutorialPanel.SetActive(true);
             GetComponent<SpriteRenderer>().sortingOrder = 1;
+            Light2D light = GetComponentInChildren<Light2D>();
+            light.enabled = true;
             gametime.instance.newtimescale(0);
             eventTrigger.enabled = true;
             return;
@@ -61,6 +66,8 @@ public class bane : MonoBehaviour
         tutorialPanel.SetActive(false);
         gametime.instance.backtimescale();
         GetComponent<SpriteRenderer>().sortingOrder = 0;
+        Light2D light = GetComponentInChildren<Light2D>();
+        light.enabled = false;
         bane.hastutorialed =true;
         bane[] banes = FindObjectsByType<bane>(FindObjectsSortMode.None);
         foreach(var instance in banes)
@@ -79,7 +86,7 @@ public class bane : MonoBehaviour
         player player = FindFirstObjectByType<player>();
         Rigidbody2D rigid_player = player.GetComponent<Rigidbody2D>();
         Vector2 add_vector = transform.up;
-        rigid_player.AddForce(add_vector * 600f);
+        rigid_player.AddForce(add_vector * 550f);
         isBounding = false;
     }
 }

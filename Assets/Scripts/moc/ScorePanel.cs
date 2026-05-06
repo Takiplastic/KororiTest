@@ -8,6 +8,12 @@ public class ScorePanel : MonoBehaviour
 
     private Text text;
     private int score;
+
+    public int Score()
+    {
+        return score;
+    }
+
     private void Start()
     {
         score = 0;

@@ -72,6 +72,12 @@ public class DataHandler : MonoBehaviour
         SaveOptionData();
     }
 
+    public void ChangeOptionData(OptionData newData)
+    {
+        optionData_ = newData;
+        SaveOptionData();
+    }
+
     public bool LoadStageDatas()
     {
         string datastr = string.Empty;
@@ -91,16 +97,31 @@ public class DataHandler : MonoBehaviour
         return true;
     }
 
-    public void SaveStageDatas(StageDatas stageDatas)
+    public void SaveStageDatas()
     {
         StreamWriter writer;
 
-        string jsonstr = JsonUtility.ToJson(stageDatas);
+        string jsonstr = JsonUtility.ToJson(stageDatas_);
 
         writer = new StreamWriter(Application.persistentDataPath + "/stageDatas.json", false);
         writer.Write(jsonstr);
         writer.Flush();
         writer.Close();
+    }
+
+    public void ChangeStageData(int id, bool hasUnLocked, int score = 0)
+    {
+        StageData oldData = stageDatas_.stageDataList[id - 1];
+        if (!oldData.hasUnLocked_ || oldData.score_ < score)
+        {
+            stageDatas_.stageDataList[id - 1] = new StageData(id, hasUnLocked, score);
+        }
+        else
+        {
+            return;
+        }
+            
+        SaveStageDatas();
     }
 
     public void CreateInitStageDatas()
