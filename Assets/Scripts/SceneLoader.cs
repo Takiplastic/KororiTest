@@ -8,10 +8,10 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
-
+    [SerializeField]
     private const float WAIT_TIME = 0.2f;
 
-    private static SceneLoader instance_ = null;
+    public static SceneLoader instance_ = null;
 
     private void Awake()
     {
@@ -65,6 +65,7 @@ public class SceneLoader : MonoBehaviour
 
     public void Reload()
     {
+        gametime.instance.Initialize();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

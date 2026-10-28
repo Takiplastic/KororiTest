@@ -7,9 +7,11 @@ public class pause : MonoBehaviour
     [SerializeField]
     private bool needHilightObj = false;
     [SerializeField]
-    private CanvasGroup restartButton = null;
+    private Image restartButton = null;
     [SerializeField]
-    private CanvasGroup menuButton = null;
+    private Image menuButton = null;
+    [SerializeField]
+    private nokogiri nokogiri = null;
 
     private player player_ = null;
     private goal goal_ = null;
@@ -17,31 +19,31 @@ public class pause : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Initialize()
     {
-        gametime.instance.Initialize();
-        gametime.instance.newtimescale(0);
-
         player_ = FindAnyObjectByType<player>();
         goal_ = FindAnyObjectByType<goal>();
 
         if (needHilightObj)
             HilightOnPlayerAndGoal();
+        if (nokogiri)
+            nokogiri.HilightOn();
     }
 
     public void StartGame()
     {
         gametime.instance.backtimescale();
         gameObject.SetActive(false);
-        restartButton.alpha = 1.0f;
-        restartButton.interactable = true;
-        menuButton.alpha = 1.0f;
-        menuButton.interactable = true;
+        restartButton.enabled = true;
+        menuButton.enabled = true;
 
         if (needHilightObj)
         {
             HilightOffPlayerAndGoal();
-            player_.StartGame();
         }
-            
+        if (nokogiri)
+        {
+            nokogiri.HilightOff();
+        }
+        player_.StartGame();
     }
 
     private void HilightOnPlayerAndGoal()

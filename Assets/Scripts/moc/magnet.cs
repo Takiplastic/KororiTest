@@ -15,6 +15,12 @@ public class magnet : MonoBehaviour
     private EventTrigger eventTrigger;
     public bool isPulling = false;
     public bool isTouching = false;
+    private Vector2 _initialCenterPosition;
+
+    private void Awake()
+    {
+        _initialCenterPosition = center.position;
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -30,7 +36,7 @@ public class magnet : MonoBehaviour
         else
             eventTrigger.enabled = true;
 
-            magnetarea = transform.GetChild(0);
+        magnetarea = transform.GetChild(0);
         isTouching = false;
     }
 
@@ -54,7 +60,7 @@ public class magnet : MonoBehaviour
 
     public void hidetutorial()
     {
-        if (magnet.hastutorialed || !needTutorial)
+        if (!tutorialPanel || magnet.hastutorialed || !needTutorial)
             return;
 
         tutorialPanel.SetActive(false);
@@ -83,13 +89,21 @@ public class magnet : MonoBehaviour
     private void Push()
     {
         Debug.Log("Called:Push");
-        //centerˆÚ“®
-        float y = (float)(center.position.y + 0.01 * Mathf.Sin(Time.deltaTime));
-        center.position = new Vector2(center.position.x, y);
-        //player‚Ğ‚«‚Â‚¯
+
+        // center‚ğã‰º‚ÉüŠú‰^“®
+        float y = _initialCenterPosition.y + 0.01f * Mathf.Sin(Time.time);
+
+        center.position = new Vector2(
+            _initialCenterPosition.x, y
+        );
+
+        // player‚ğˆø‚«Šñ‚¹‚é
         player player = FindFirstObjectByType<player>();
         Rigidbody2D rigid_player = player.GetComponent<Rigidbody2D>();
-        Vector2 add_vector = (center.position - player.transform.position).normalized;
+
+        Vector2 add_vector =
+            (center.position - player.transform.position).normalized;
+
         rigid_player.AddForce(add_vector * 10f);
     }
 }
