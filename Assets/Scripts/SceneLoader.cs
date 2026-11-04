@@ -13,11 +13,14 @@ public class SceneLoader : MonoBehaviour
 
     private static SceneLoader instance_ = null;
 
+    public static SceneLoader Instnace => instance_;
+    
     private void Awake()
     {
         if (!instance_)
         {
             instance_ = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -66,5 +69,10 @@ public class SceneLoader : MonoBehaviour
     public void Reload()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void Quit()
+    {
+        Debug.Log("ÉQÅ[ÉÄèIóπ");
     }
 }

@@ -7,8 +7,7 @@ using UnityEngine.UI;
 
 public class OptionPanelManager : MonoBehaviour
 {
-    [SerializeField]
-    private SwitchButton switchButton_;
+    [SerializeField] private SwitchButton switchButton_;
     
     private Animator animator_;
 
@@ -16,8 +15,7 @@ public class OptionPanelManager : MonoBehaviour
     public void Start()
     {
         Assert.IsNotNull(switchButton_);
-        switchButton_.Start();
-
+   
         animator_ = GetComponent<Animator>();
         Assert.IsNotNull(animator_);
     }

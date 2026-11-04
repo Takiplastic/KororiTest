@@ -1,27 +1,42 @@
-using NUnit.Framework;
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 
-//On/Offを切り替えるボタンのアニメーション連携用クラス
+//スイッチクラス
+[RequireComponent(typeof(Button))]
 public class SwitchButton: MonoBehaviour
 {
+    [SerializeField] private Sprite _onSprite;
+    [SerializeField] private Sprite _offSprite;
+
     private bool isOn;
-    private Animator animator_;
+    private Button _button;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public void Start()
+    private void Awake()
     {
-        animator_ = GetComponent<Animator>();
-        Assert.IsNotNull(animator_);
-
-        //データ保持クラスからもらって初期化するように変更
-        isOn = true;
-        Switch();
+        _button = GetComponent<Button>();
     }
 
-    public void Switch()
+    public void Initialize(bool initial, Action<bool> OnClickAction)
     {
-        isOn = !isOn;
-        animator_.SetBool("Switch", isOn);
+        if (OnClickAction == null)
+            Debug.LogWarning("スイッチ切り替え時の通知先が設定されていません");
 
+        isOn = initial;
+        SetSprite();
+        _button.onClick.AddListener(() =>
+        {
+            isOn = !isOn;
+            SetSprite();
+            OnClickAction?.Invoke(isOn);
+        });
+    }
+
+    private void SetSprite()
+    {
+        if(isOn)
+            _button.image.sprite = _onSprite;
+        else
+            _button.image.sprite = _offSprite;
     }
 }
