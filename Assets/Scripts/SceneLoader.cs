@@ -70,9 +70,4 @@ public class SceneLoader : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
-    public void Quit()
-    {
-        Debug.Log("ƒQ[ƒ€I—¹");
-    }
 }

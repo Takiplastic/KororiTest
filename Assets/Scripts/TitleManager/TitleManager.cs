@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class TitleManager : MonoBehaviour 
+public class TitleManager : MonoBehaviour, ISceneController
 { 
     //タイトルシーンの状態
     private enum TitleState{
@@ -16,9 +16,6 @@ public class TitleManager : MonoBehaviour
     [SerializeField] BasePanel _titlePanel;
     [SerializeField] BasePanel _optionPanel;
     [SerializeField] BasePanel _exitConfirmPanel;
-    //[SerializeField] MasterDataProvider _masterDataProvider;
-    //[SerializeField] SaveDataManager _saveDataManager;
-    //[SerializeField] AudioManager _audioManager;
     
     public void Awake()
     {
@@ -30,9 +27,8 @@ public class TitleManager : MonoBehaviour
         _currenState = TitleState.None;
     }
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    //起動
+    public void Boot()
     {
         //通知登録
         var titlePanel = _titlePanel as TitlePanel;
@@ -49,7 +45,7 @@ public class TitleManager : MonoBehaviour
         if (confirmPanel != null)
         {
             confirmPanel.OnHideFinished += () => ChangeState(TitleState.Normal);
-            confirmPanel.OnExit += () => SceneLoader.Instnace.Quit(); //本当はAppManagerから呼び出し
+            confirmPanel.OnExit += () => AppManager.Instance.Quit(); //本当はAppManagerから呼び出し
         }
 
         _optionPanel.OnHideFinished += () => ChangeState(TitleState.Normal);

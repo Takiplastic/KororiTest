@@ -28,8 +28,6 @@ public class TitlePanel : BasePanel
 
     public override void Initialize()
     {
-
-        base.Initialize();
         if (OnOption == null)
             Debug.LogWarning("İ’è’Ê’m‚Ì‘—‚èæ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
         if (OnConfirm == null)
