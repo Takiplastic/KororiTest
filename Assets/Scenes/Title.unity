@@ -1230,6 +1230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63d8bcd7c5cbf4b47ab7edb8cea660b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _sceneId: 0
   _titlePanel: {fileID: 1096216620}
   _optionPanel: {fileID: 1138009743}
   _exitConfirmPanel: {fileID: 131387680}
@@ -1356,6 +1357,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f1abced87ccd14993528da809a3b69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _sceneCatalog: {fileID: 11400000, guid: 05c842c6072cf4d40a7d4e5f897c28d3, type: 2}
+  _openingInsertSceneId: 
 --- !u!4 &753680267
 Transform:
   m_ObjectHideFlags: 0
