@@ -42,6 +42,16 @@ public class SceneCatelog : ScriptableObject
         else return sceneData.SceneName;
     }
 
+    //次のシーンIDを取得
+    public int GetNextSceneId(int sceneId)
+    {
+        var sceneData = GetSceneData(sceneId);
+        if (sceneData != null)
+            return sceneData.NextSceneId;
+        else
+            return -1;
+    }
+
     //次のシーン名を取得
     public string GetNextSceneName(int sceneId)
     {
