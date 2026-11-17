@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9486a8956b7deb14388bc886c60f1f7a, type: 3}
+  m_Name: Test_SceneCatalog
+  m_EditorClassIdentifier: 
+  _sceneList:
+  - {fileID: 11400000, guid: 3ad75ff9a8734084b9cc69651e8d2e99, type: 2}
+  - {fileID: 11400000, guid: fcfc1b03a8963e945a59fef2e38d86ce, type: 2}
+  - {fileID: 11400000, guid: e21261ab320bf3f438e616f4c28148c3, type: 2}
+  - {fileID: 11400000, guid: 6e6c6d9114603534a966150ccddb72e0, type: 2}
+  - {fileID: 11400000, guid: ce8334cc4f1bfcd47a936d0fd8474ff6, type: 2}
+  - {fileID: 11400000, guid: 91ef1780d8cd3474e8d6a173c09937a4, type: 2}
+  - {fileID: 11400000, guid: 10291ebdf6167394b87a7507653fc52a, type: 2}
+  - {fileID: 11400000, guid: 3bd2583aa0194fe46be6d8329befe6b0, type: 2}
+  - {fileID: 11400000, guid: 1cc6513e22220734e9ab84a608156c6f, type: 2}
+  _initialSceneId: 0
+  _selectSceneId: 1

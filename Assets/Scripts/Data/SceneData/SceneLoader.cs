@@ -18,9 +18,9 @@ public class SceneLoader : MonoBehaviour
     [SerializeField] private SceneCatelog _sceneCatalog = null; //シーンカタログ
     [SerializeField] private InsertScenePair[] _insertScenePairs; //シーンを挿入するための設定項目
 
-    private int _currentSceneId = -1;           //現在のシーンID
-    private int _sceneIdAfterInserted = -1;     //シーン挿入後の次のシーンID
-
+    private int _currentSceneId = INVALID_SCENE_ID;           //現在のシーンID
+    private int _sceneIdAfterInserted = INVALID_SCENE_ID;     //シーン挿入後の次のシーンID
+    private const int INVALID_SCENE_ID = -1;
     public enum LoadType    //ロードの種類
     {
         Initial,     //初期シーンをロード
@@ -61,44 +61,42 @@ public class SceneLoader : MonoBehaviour
     //ロードタイプごとの遷移を制御
     public void LoadScene(LoadType loadType)
     {
-        if (_sceneIdAfterInserted != -1)
+        if (_sceneIdAfterInserted != INVALID_SCENE_ID)
         {
             AfterInsertLoad();
             return;
-        }   
+        }
 
-        string sceneName = null; //遷移先のシーン名
+        int sceneId = INVALID_SCENE_ID;     //遷移先ID(インサートチェック前)
+        int nextSceneId = INVALID_SCENE_ID; //遷移先ID(インサートチェック後)
 
         switch (loadType)
         {
             case LoadType.Initial:
-                sceneName = _sceneCatalog.GetInitialSceneName();
+                sceneId = _sceneCatalog.GetInitialSceneId;
+                nextSceneId = InsertCheck(sceneId);
+
                 break;
 
             case LoadType.StageSelect:
-                sceneName = _sceneCatalog.GetSelectSceneName();
+                sceneId = _sceneCatalog.GetSelectSceneId;
+                nextSceneId = InsertCheck(sceneId);
+
                 break;
 
             case LoadType.Next:
-                //シーン挿入が必要かを判定
-                var nextSceneId = _sceneCatalog.GetNextSceneId(_currentSceneId);
-                if (IsInsertTarget(nextSceneId))
-                {
-                    InsertScene(nextSceneId);
-                    return;
-                }
-                sceneName = _sceneCatalog.GetNextSceneName(_currentSceneId);
+                sceneId = _sceneCatalog.GetNextSceneId(_currentSceneId);
+                nextSceneId = InsertCheck(sceneId);
+
                 break;
 
             case LoadType.Reload:
-                sceneName = _sceneCatalog.GetSceneName(_currentSceneId);
+                nextSceneId = _currentSceneId;
                 break;
         }
 
-        //シーンがビルドに含まれているかを確認してからロード
-        //ビルドに含まれていない場合はロードしないでエラーログ出力
-        if (SceneExists(sceneName))
-            SceneManager.LoadScene(sceneName);
+        LoadSceneById(nextSceneId);
+
     }
 
     //特定のシーンを指定して遷移(ステージ選択シーンでのみ利用可能)
@@ -109,17 +107,9 @@ public class SceneLoader : MonoBehaviour
             Debug.LogError("選択シーン以外で、指定型ロードは使用できません");
             return;
         }
-        
-        //シーン挿入が必要かを判定
-        if(IsInsertTarget(sceneId))
-        {
-            InsertScene(sceneId);
-            return;
-        }
 
-        string sceneName = _sceneCatalog.GetSceneName(sceneId);
-        if (SceneExists(sceneName))
-            SceneManager.LoadScene(sceneName);
+        int nextSceneId = InsertCheck(sceneId);
+        LoadSceneById(nextSceneId);
     }
 
     //ロードしたいシーンがビルド内に含まれているかのチェック
@@ -136,46 +126,46 @@ public class SceneLoader : MonoBehaviour
             return true;
     }
 
-    //指定のシーンの前に挿入が必要かどうかをチェック
-    private bool IsInsertTarget(int sceneId)
+    //挿入が必要かチェックし、必要なら遷移先を保存して
+    //遷移先を挿入シーンに変更
+    private int InsertCheck(int sceneId)
     {
-        foreach(var scenePair in _insertScenePairs)
-        {
-            if (scenePair.NextSceneId == sceneId)
-            {
-                return true;
-            }
-                
-        }
-        return false;
-    }
-
-    //通常のシーケンスに追加のシーンを挿入
-    private void InsertScene(int sceneId)
-    {
-        int insertSceneId = -1;
-
-        //対応するシーンペアが存在することはIsInsertTargetで確約済み
+        //指定のシーンの前に挿入が必要かどうかをチェック
         foreach (var scenePair in _insertScenePairs)
         {
             if (scenePair.NextSceneId == sceneId)
             {
-                insertSceneId = scenePair.InsertSceneId;
+                _sceneIdAfterInserted = sceneId; //挿入した後のシーンIDを保持しておく
+                return scenePair.InsertSceneId;  //挿入シーンのIDを遷移先として返す
             }
         }
 
-        _sceneIdAfterInserted = sceneId; //挿入した後のシーンIDを保持しておく
-        string sceneName = _sceneCatalog.GetSceneName(insertSceneId);
-        if (SceneExists(sceneName))
-            SceneManager.LoadScene(sceneName);
+        return sceneId;
     }
 
     //挿入したシーンから通常のシーケンスに戻る
     private void AfterInsertLoad()
     {
-        string sceneName = _sceneCatalog.GetSceneName(_sceneIdAfterInserted);
-        _sceneIdAfterInserted = -1; //挿入後のシーンIDを初期化
+        if(LoadSceneById(_sceneIdAfterInserted))
+        {
+            _sceneIdAfterInserted = INVALID_SCENE_ID; //遷移が成功したらリセット
+        }
+    }
+
+    //IDを受け取り、シーンをロード
+    //成功か失敗かを返す
+    private bool LoadSceneById(int sceneId)
+    {
+        string sceneName = _sceneCatalog.GetSceneName(sceneId);
         if (SceneExists(sceneName))
+        {
             SceneManager.LoadScene(sceneName);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
     }
 }
