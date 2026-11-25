@@ -12,7 +12,8 @@ public class TitleManager : MonoBehaviour, ISceneController
         ExitConfirm //終了確認
     }
 
-    private TitleState _currenState;    
+    private TitleState _currenState;
+    [SerializeField] private int _sceneId = 0; //タイトルシーンのデータID
     [SerializeField] BasePanel _titlePanel;
     [SerializeField] BasePanel _optionPanel;
     [SerializeField] BasePanel _exitConfirmPanel;
@@ -30,13 +31,16 @@ public class TitleManager : MonoBehaviour, ISceneController
     //起動
     public void Boot()
     {
+        //シーンデータをシーンローダーに登録
+        SceneLoader.Instance.SetSceneId(_sceneId);
+
         //通知登録
         var titlePanel = _titlePanel as TitlePanel;
         if (titlePanel != null)
         {
             titlePanel.OnOption += () => ChangeState(TitleState.Option);
             titlePanel.OnConfirm += () => ChangeState(TitleState.ExitConfirm);
-            titlePanel.OnStart += () => SceneLoader.Instnace.LoadScene("Stage_1"); //本当はMasterDataProviderからもらう
+            titlePanel.OnStart += () => SceneLoader.Instance.LoadScene(SceneLoader.LoadType.Next);
 
             Debug.Log("TitlePanel イベント登録完了");
         }
