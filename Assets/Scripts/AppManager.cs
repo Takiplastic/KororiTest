@@ -1,5 +1,6 @@
 using UnityEngine.Assertions;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 //ゲーム全体を管理するクラス
@@ -47,6 +48,14 @@ public class AppManager : MonoBehaviour
                                     GetParser());
         _audioManager.Initialize(!_saveDataManager.IsSoundActive());
 
+        SceneManager.sceneLoaded += ActivateSceneController;
+
+        ActivateSceneController(new Scene(), LoadSceneMode.Single);
+    }
+
+    //シーンコントローラーを起動させる
+    private void ActivateSceneController(Scene scene, LoadSceneMode mode)
+    {
         //シーンコントローラーを取得
         GameObject obj = GameObject.FindGameObjectWithTag(_sceneControllerTag);
         if (obj == null)
@@ -56,7 +65,7 @@ public class AppManager : MonoBehaviour
         }
 
         var sceneController = obj.GetComponent<ISceneController>();
-        if(sceneController == null)
+        if (sceneController == null)
         {
             Debug.LogError("シーンコントローラークラスがアタッチされていません");
             return;
